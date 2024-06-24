@@ -13,7 +13,7 @@
     app:cardUseCompatPadding="true">
 
     <LinearLayout
-        android:background="#33BB86FC"
+        android:background="@color/hh"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
