@@ -30,8 +30,20 @@ class ShopItemFragment: Fragment() {
     private var shopItemId = ShopItem.UNDEFINED_ID
     private var inputName = ""
     private var inputCount = ""
+    private lateinit var onEditingFinishedListener: OnEditingFinishedListener
+
+    override fun onAttach(context: Context) {
+        Log.d("Lifecycle", "onAttach")
+        super.onAttach(context)
+        if (context is OnEditingFinishedListener) {
+            onEditingFinishedListener = context
+        } else {
+            throw RuntimeException("Activity must implement listener OnEditingFinishedListener")
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.d("ShopItemFragment", "onCreate")
+        Log.d("Lifecycle", "onCreate")
         super.onCreate(savedInstanceState)
         parseParams()
     }
@@ -41,11 +53,13 @@ class ShopItemFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        Log.d("Lifecycle", "onCreateView")
         return inflater.inflate(R.layout.fragment_shop_item, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d("Lifecycle", "onViewCreated")
         viewModel = ViewModelProvider(this).get(ShopItemViewModel::class.java)
         initViews(view)
         launchRightMode()
@@ -53,6 +67,40 @@ class ShopItemFragment: Fragment() {
         addTextChancgeListeners()
     }
 
+    override fun onStart() {
+        super.onStart()
+        Log.d("Lifecycle", "onStart")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("Lifecycle", "onResume")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d("Lifecycle", "onPause")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d("Lifecycle", "onStop")
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Log.d("Lifecycle", "onDestroyView")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("Lifecycle", "onDestroy")
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        Log.d("Lifecycle", "onDetach")
+    }
     private fun observeViewModel() {
         viewModel.shouldCloseScreen.observe(viewLifecycleOwner) {
             activity?.onBackPressed()
