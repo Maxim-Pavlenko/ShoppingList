@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.shoppinglist.data.ShopListRepositoryImpl
 import com.example.shoppinglist.domain.AddShopItemUseCase
 import com.example.shoppinglist.domain.EditShopItemUseCase
@@ -39,12 +40,10 @@ class ShopItemViewModel(application: Application): AndroidViewModel(application)
     val shouldCloseScreen: LiveData<Unit>
         get() = _shouldCloseScreen
 
-    private val scope = CoroutineScope(Dispatchers.IO)
-
     fun getShopItem(shopItemId: Int) {
-        scope.launch {
+        viewModelScope.launch {
             val item = getShopItemUseCase.getShopItem(shopItemId)
-            _shopItem.value = item
+            _shopItem.postValue(item)
         }
     }
 
@@ -54,7 +53,7 @@ class ShopItemViewModel(application: Application): AndroidViewModel(application)
         val faildValid = validateInput(name, count)
         if (faildValid) {
             _shopItem.value?.let {
-                scope.launch {
+                viewModelScope.launch {
                     editShopItemUseCase.editShopItem(it.copy(name = name, count = count))
                     finishWork()
                 }
@@ -67,7 +66,7 @@ class ShopItemViewModel(application: Application): AndroidViewModel(application)
         val count = parseCount(inputCount)
         val faildValid = validateInput(name, count)
         if (faildValid) {
-            scope.launch {
+            viewModelScope.launch {
                 val shopItem = ShopItem(name, count, false)
                 addShopItemUseCase.addShopItem(shopItem)
                 finishWork()
@@ -108,11 +107,6 @@ class ShopItemViewModel(application: Application): AndroidViewModel(application)
     }
 
     private fun finishWork() {
-        _shouldCloseScreen.value = Unit
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        scope.cancel()
+        _shouldCloseScreen.postValue(Unit)
     }
 }

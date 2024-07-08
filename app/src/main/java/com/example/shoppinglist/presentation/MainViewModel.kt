@@ -28,15 +28,14 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
 
     val shopList: LiveData<List<ShopItem>> = getShopListUseCase.getShopList()
 
-    private val scope = CoroutineScope(Dispatchers.IO)
     fun deleteShopItem(shopItem: ShopItem) {
-        scope.launch {
+        viewModelScope.launch {
             deleteShopItemUseCase.deleteShopItem(shopItem)
         }
     }
     
     fun changeEnableState (shopItem: ShopItem) {
-        scope.launch {
+        viewModelScope.launch {
             val newItem = shopItem.copy(enabled = !shopItem.enabled)
             editShopItemUseCase.editShopItem(newItem)
         }
@@ -45,6 +44,6 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
 
     override fun onCleared() {
         super.onCleared()
-        scope.cancel()
+        viewModelScope.cancel()
     }
 }
