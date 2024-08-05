@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.shoppinglist"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -28,11 +28,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 }
 
@@ -47,12 +47,18 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
+    // Dagger
+    implementation("com.google.dagger:dagger:2.51.1")
+    implementation("com.google.dagger:dagger-compiler:2.51.1")
+
+    implementation ("com.android.tools:desugar_jdk_libs:2.0.4") // или последняя версия
+
     implementation ("com.google.android.material:material:1.12.0")
     implementation ("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.3")
-    implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.8.3")
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.4")
+    implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.8.4")
     implementation ("androidx.room:room-runtime:2.6.1")
     implementation ("androidx.room:room-ktx:2.6.1")
     kapt ("androidx.room:room-compiler:2.6.1")

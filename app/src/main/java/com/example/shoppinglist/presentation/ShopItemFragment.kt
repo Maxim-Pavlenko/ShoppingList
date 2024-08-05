@@ -17,6 +17,7 @@ import com.example.shoppinglist.R
 import com.example.shoppinglist.domain.ShopItem
 import com.google.android.material.textfield.TextInputLayout
 import java.lang.RuntimeException
+import javax.inject.Inject
 
 class ShopItemFragment: Fragment() {
 
@@ -31,9 +32,15 @@ class ShopItemFragment: Fragment() {
     private var inputName = ""
     private var inputCount = ""
     private lateinit var onEditingFinishedListener: OnEditingFinishedListener
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val component by lazy {
+        (requireActivity().application as ShoppApplication).component
+    }
 
     override fun onAttach(context: Context) {
-        Log.d("Lifecycle", "onAttach")
+        component.inject(this)
         super.onAttach(context)
         if (context is OnEditingFinishedListener) {
             onEditingFinishedListener = context
@@ -60,7 +67,7 @@ class ShopItemFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d("Lifecycle", "onViewCreated")
-        viewModel = ViewModelProvider(this).get(ShopItemViewModel::class.java)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(ShopItemViewModel::class.java)
         initViews(view)
         launchRightMode()
         observeViewModel()
